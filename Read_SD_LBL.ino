@@ -1,15 +1,15 @@
 #include <SPI.h>
 #include <SD.h>
-String a;
+String line;
 File myFile;
+unsigned long counter = 0;
 
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
   while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
+     // wait for serial port to connect. Needed for native USB port only
   }
-
 
   Serial.print("Initializing SD card...");
 
@@ -19,21 +19,20 @@ void setup() {
   }
   Serial.println("initialization done.");
 
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
-
-  // re-open the file for reading:
-  myFile = SD.open("b.txt");
+  // open the file for reading:
+  myFile = SD.open("myfile.txt");
   if (myFile) {
-    Serial.println("b.txt:");
-
-    while (a = myFile.readStringUntil('\n')){
-        Serial.println(a);
+        while (line = myFile.readStringUntil('\n')){ //or vany other line ending char
+        Serial.println(line);
+        counter++;
         a = "";
       }
     }
     // close the file:
     myFile.close();
+    Serial.println();
+    Serial.print("line counter: ");
+    Serial.println(counter);
   } 
 
 void loop() {
